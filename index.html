@@ -361,12 +361,92 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
 .foot-bottom a{color:rgba(255,255,255,.6)}
 @media (max-width:820px){.foot{grid-template-columns:1fr 1fr}}
 
+/* ================= Motion layer ================= */
+html{scroll-behavior:smooth}
+body{transition:background-color .9s ease}
+body[data-tone="sand"]{background:#EEE1D3}
+body[data-tone="blush"]{background:#F3E6DE}
+body[data-tone="mint"]{background:#E9F3EC}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;transform-origin:0 50%;transform:scaleX(var(--p,0));background:linear-gradient(90deg,var(--mint),var(--ember),var(--copper))}
+/* reveal: only elements below the fold at load get the hidden start state */
+.rv{transition:opacity 1s cubic-bezier(.16,.84,.24,1),transform 1s cubic-bezier(.16,.84,.24,1),filter 1s ease;transition-delay:var(--d,0ms)}
+.rv.pre{opacity:0;transform:translateY(46px)}
+.rv.pre.zoom{transform:scale(.92)}
+.rv.pre.blur{filter:blur(8px)}
+.rv.pre.left{transform:translateX(-56px)}
+.rv.pre.right{transform:translateX(56px)}
+/* hero entrance */
+@media (prefers-reduced-motion:no-preference){
+  .hero-card{animation:cardIn 1.1s cubic-bezier(.16,.84,.24,1) both}
+  @keyframes cardIn{from{transform:translateY(30px) scale(.97);opacity:.4}to{transform:none;opacity:1}}
+  .hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+  .hero h1 .ln>span{display:inline-block;animation:lineUp 1.1s cubic-bezier(.16,.84,.24,1) both}
+  .hero h1 .ln:nth-child(2)>span{animation-delay:.14s}
+  @keyframes lineUp{from{transform:translateY(105%)}to{transform:none}}
+  .hero-copy>*:not(h1){animation:fadeUp .9s .35s cubic-bezier(.16,.84,.24,1) both}
+  .hero-copy>.hero-sub{animation-delay:.45s}.hero-copy>.hero-ctas{animation-delay:.55s}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .badge{animation:pop .8s cubic-bezier(.3,1.4,.5,1) both}.badge.b1{animation-delay:.7s}.badge.b2{animation-delay:.85s}.peek{animation:pop .8s 1s cubic-bezier(.3,1.4,.5,1) both}
+  @keyframes pop{from{opacity:0;transform:translateY(16px) scale(.9)}to{opacity:1;transform:none}}
+}
+.hero h1 .ln{display:block}
+/* hero art layers */
+.art-par{position:absolute;inset:0;transform:translate3d(calc(var(--mx,0)*18px),calc(var(--my,0)*14px + var(--sy,0)*-80px),0) rotate(calc(var(--sy,0)*-8deg));transition:transform .25s ease-out}
+.badge.b1{translate:calc(var(--mx,0)*-26px) calc(var(--my,0)*-18px);transition:translate .3s ease-out}
+.badge.b2{translate:calc(var(--mx,0)*-14px) calc(var(--my,0)*-24px);transition:translate .3s ease-out}
+#spark{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.orbit{position:absolute;left:52%;top:45%;width:min(520px,100%);transform:translate(-50%,-50%) rotate(-14deg);overflow:visible;pointer-events:none}
+.orbit .trail{fill:none;stroke:rgba(255,236,220,.45);stroke-width:1.4;stroke-dasharray:3 7}
+.orbit .plane{fill:#fff}
+.halo{position:absolute;left:52%;top:42%;width:420px;height:420px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(255,220,190,.35),rgba(255,220,190,0));filter:blur(6px)}
+@media (prefers-reduced-motion:no-preference){.halo{animation:breathe 6s ease-in-out infinite}@keyframes breathe{50%{transform:translate(-50%,-50%) scale(1.12);opacity:.7}}}
+.hero-card{transform-origin:50% 0;scale:calc(1 - var(--sy,0)*.035)}
+/* marquee */
+.marquee{overflow:hidden;padding:40px 0 10px;margin-top:40px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mq-track{display:flex;width:max-content;gap:0;transform:translateX(var(--mq,0px))}
+.mq-track span.w{font-family:var(--font-display);font-weight:300;font-size:clamp(2.6rem,7vw,6rem);letter-spacing:-.04em;line-height:1;white-space:nowrap;padding:0 .35em;color:var(--copper)}
+.mq-track span.w.o{color:transparent;-webkit-text-stroke:1.2px var(--copper)}
+.mq-track span.w.a{font-family:var(--font-accent);font-style:italic;font-weight:500}
+.mq-track svg{width:clamp(28px,4vw,52px);height:auto;align-self:center;color:var(--ember);flex:none;stroke-width:1.4}
+/* card interactions */
+.treat,.doc,.reason,.ba-card,.place{transition:transform .5s cubic-bezier(.16,.84,.24,1),box-shadow .5s}
+.treat:hover,.doc:hover,.reason:hover,.place:hover{transform:translateY(-8px);box-shadow:var(--shadow)}
+.treat .vis svg{transition:transform .8s cubic-bezier(.16,.84,.24,1)}
+.treat:hover .vis svg{transform:scale(1.08) rotate(-3deg)}
+.treat .vis{position:relative;overflow:hidden}
+.treat .vis::after{content:"";position:absolute;inset:-40%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.7) 50%,transparent 60%);transform:translateX(-60%);transition:transform 1.1s ease}
+.treat:hover .vis::after{transform:translateX(60%)}
+.doc .ph .mono{transition:transform .7s cubic-bezier(.16,.84,.24,1)}
+.doc:hover .ph .mono{transform:scale(1.18)}
+.place .ph{transition:transform .8s cubic-bezier(.16,.84,.24,1)}.place{overflow:hidden}.place:hover .ph{transform:scale(1.05)}
+/* trip: numbers light up in sequence + drawn line */
+.trip{position:relative;overflow:hidden}
+.steps .n{transition:color .6s,-webkit-text-stroke .6s}
+.steps li.pre .n,.steps li.dim .n{color:transparent;-webkit-text-stroke:1px var(--copper)}
+.trip-line{height:3px;border-radius:3px;background:var(--line);margin:-8px 0 28px;overflow:hidden}
+.trip-line i{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--ember));transform-origin:0 50%;transform:scaleX(var(--tl,0))}
+/* Ararat scene */
+.ararat{position:relative;overflow:hidden;min-height:340px}
+.ararat .scene{position:absolute;inset:0;width:100%;height:100%}
+.ararat .scene g[data-depth]{transform:translateY(calc(var(--py,0) * var(--dep) * 1px));transition:transform .2s linear}
+.band.why{position:relative;overflow:hidden;background:linear-gradient(180deg,#F6DCC4 0%,#EFC9AB 55%,#E4B391 100%);grid-template-columns:1fr;min-height:680px;align-content:start}
+.band.why>div,.band.why>.btn{position:relative;z-index:2;max-width:560px}
+.band.why>.btn{justify-self:start}
+.band.why .scene{position:absolute;top:auto;left:0;right:0;bottom:0;width:100%;height:auto;aspect-ratio:1200/420;z-index:1;overflow:visible}
+.wa-hero{position:relative;border-radius:var(--r-lg);overflow:hidden;background:linear-gradient(180deg,#F6DCC4 0%,#EFC9AB 60%,#E4B391 100%);padding:56px 56px 220px;margin-top:10px}
+.wa-hero>*:not(svg){position:relative;z-index:2}
+.wa-hero .scene{position:absolute;top:auto;left:0;right:0;bottom:0;width:100%;height:auto;aspect-ratio:1200/420;z-index:1;overflow:visible}
+.wa-hero{padding-bottom:clamp(200px,30vw,380px)!important}
+@media (max-width:820px){.wa-hero{padding:32px 22px 180px}.band.why{min-height:560px}}
+@media (prefers-reduced-motion:reduce){.art-par,.badge,.hero-card{translate:none!important;scale:none!important;transform:none}.mq-track{transform:none}}
+
 .view[hidden]{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
+<div class="progress" aria-hidden="true"></div>
 <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 
 <!-- shared SVG icons -->
@@ -422,12 +502,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
 
 <!-- =================== HOME =================== -->
 <div class="view" id="v-home">
-  <section class="hero">
+  <section class="hero" data-tone="porcelain">
     <div class="wrap hero-wrap">
       <div class="hero-card">
         <div class="hero-copy">
           <p class="eyebrow" data-i18n="hero.eyebrow">Dental tourism · Yerevan, Armenia</p>
-          <h1><span data-i18n="hero.h1a">Your new smile,</span> <em class="acc" data-i18n="hero.h1b">made in Yerevan</em></h1>
+          <h1><span class="ln"><span data-i18n="hero.h1a">Your new smile,</span></span> <span class="ln"><em class="acc" data-i18n="hero.h1b">made in Yerevan</em></span></h1>
           <p class="hero-sub" data-i18n-html="hero.sub">Veneers and implants from Venera's specialists, with your whole trip arranged <b>from A to Z</b>: flights, airport pickup, hotel, guide and city tour.</p>
           <div class="hero-ctas">
             <a class="btn btn-mint" href="#consultation"><svg class="i"><use href="#i-video"/></svg><span data-i18n="hero.cta1">Book a free video consultation</span></a>
@@ -435,7 +515,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
           </div>
         </div>
         <div class="hero-art" aria-hidden="true">
+          <canvas id="spark"></canvas>
+          <div class="art-par">
+          <div class="halo"></div>
           <div class="glow"></div>
+          <svg class="orbit" viewBox="-260 -170 520 340"><path id="orbitPath" class="trail" d="M-240 0a240 140 0 1 0 480 0a240 140 0 1 0-480 0"/>
+            <g class="plane"><path d="M-9-3 9 0-9 3-6 0z M-3-1-1-8 2-8 1-1z M-3 1-1 8 2 8 1 1z"/><animateMotion dur="14s" repeatCount="indefinite" rotate="auto"><mpath href="#orbitPath"/></animateMotion></g></svg>
           <svg class="implant" viewBox="0 0 220 420" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="crown" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#F3ECE6"/><stop offset="1" stop-color="#C9B8AA"/></linearGradient>
@@ -460,6 +545,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
               </g>
             </g>
           </svg>
+          </div>
         <div class="badge b1"><strong data-i18n="hero.b1a">Free</strong><span data-i18n="hero.b1b">video consultation with a Venera doctor</span></div>
         <div class="badge b2"><strong>A–Z</strong><span data-i18n="hero.b2b">flights, transfers, hotel and tour arranged for you</span></div>
         </div>
@@ -485,7 +571,9 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
     </div>
   </section>
 
-  <section class="sec" id="treatments" style="padding-top:110px">
+  <div class="marquee" aria-hidden="true"><div class="mq-track" id="mq"></div></div>
+
+  <section class="sec" id="treatments" style="padding-top:70px" data-tone="porcelain">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow" data-i18n="tr.eyebrow">Treatments</p>
@@ -540,7 +628,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
     </div>
   </section>
 
-  <section class="sec" id="trip" style="padding-top:0">
+  <section class="sec" id="trip" style="padding-top:0" data-tone="sand">
     <div class="wrap">
       <div class="trip">
         <div class="sec-head">
@@ -548,6 +636,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
           <h2 data-i18n-html="trip.title">Your trip, <em class="acc">from A to Z</em></h2>
           <p class="lead" data-i18n="trip.lead">You focus on your smile; we arrange everything else. How many days you stay depends on your treatment, and your coordinator plans the dates with you.</p>
         </div>
+        <div class="trip-line" id="tripLine"><i></i></div>
         <ol class="steps">
           <li><span class="n">01</span><h3 data-i18n="trip.s1t">Send your photos</h3><p data-i18n="trip.s1d">Upload a few smile photos and any X-rays you already have.</p></li>
           <li><span class="n">02</span><h3 data-i18n="trip.s2t">Free video consultation</h3><p data-i18n="trip.s2d">Meet a Venera doctor online and talk through what you want.</p></li>
@@ -571,7 +660,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
     </div>
   </section>
 
-  <section class="sec" id="doctors" style="padding-top:0">
+  <section class="sec" id="doctors" style="padding-top:0" data-tone="porcelain">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow" data-i18n="doc.eyebrow">Our doctors</p>
@@ -581,7 +670,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
     </div>
   </section>
 
-  <section class="sec" id="results" style="padding-top:0">
+  <section class="sec" id="results" style="padding-top:0" data-tone="blush">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow" data-i18n="res.eyebrow">Results &amp; reviews</p>
@@ -603,7 +692,24 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
 
   <section class="sec" style="padding-top:0">
     <div class="wrap">
-      <div class="band why">
+      <div class="band why ararat rv zoom" data-tone="sand">
+        <svg class="scene" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+  <defs>
+   <linearGradient id="mtA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C98B6A"/><stop offset="1" stop-color="#A9654A"/></linearGradient>
+   <linearGradient id="mtB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A5638"/><stop offset="1" stop-color="#7B4532"/></linearGradient>
+   <linearGradient id="mtC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6B3826"/><stop offset="1" stop-color="#4A2619"/></linearGradient>
+  </defs>
+  <g data-depth style="--dep:.7"><circle cx="930" cy="120" r="70" fill="#FFF1E2" opacity=".85"/><circle cx="930" cy="120" r="110" fill="#FFF1E2" opacity=".25"/></g>
+  <g data-depth style="--dep:.4">
+   <path d="M300 420 L640 92 Q660 74 680 92 L1080 420Z" fill="url(#mtA)"/>
+   <path d="M600 132 L640 92 Q660 74 680 92 L724 134 L700 128 L684 146 L664 124 L646 142 L628 126Z" fill="#FFFAF4"/>
+   <path d="M120 420 L390 210 Q402 200 414 210 L640 420Z" fill="url(#mtA)" opacity=".9"/>
+   <path d="M372 225 L390 210 Q402 200 414 210 L432 224 L418 222 L404 232 L392 222 L382 230Z" fill="#FFFAF4"/>
+  </g>
+  <g data-depth style="--dep:.15"><path d="M0 420 L0 330 Q150 280 300 320 T620 300 T900 330 T1200 300 L1200 420Z" fill="url(#mtB)"/><rect x="0" y="419" width="1200" height="200" fill="#7B4532"/></g>
+  <g data-depth style="--dep:0"><path d="M0 420 L0 380 Q200 340 420 372 T820 360 T1200 370 L1200 420Z" fill="url(#mtC)"/><rect x="0" y="419" width="1200" height="200" fill="#4A2619"/>
+   <g fill="#3A1D12"><path d="M140 378h6v-40l-3-6-3 6zM154 378h5v-30l-2.5-5-2.5 5z"/><path d="M1010 372h7v-50l-3.5-7-3.5 7z"/><path d="M1030 372h5v-34l-2.5-5-2.5 5z"/></g></g>
+</svg>
         <div style="display:grid;gap:12px">
           <p class="eyebrow" data-i18n="wt.eyebrow">Why Armenia</p>
           <h2 data-i18n-html="wt.title">Lower costs, easy entry, <em class="acc">a city worth exploring</em></h2>
@@ -614,7 +720,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
     </div>
   </section>
 
-  <section class="sec" id="faq" style="padding-top:0">
+  <section class="sec" id="faq" style="padding-top:0" data-tone="mint">
     <div class="wrap faq">
       <div class="sec-head" style="margin:0">
         <p class="eyebrow" data-i18n="faq.eyebrow">FAQ</p>
@@ -641,10 +747,27 @@ footer{background:var(--ink);color:rgba(255,255,255,.75);margin-top:96px;padding
 <!-- =================== WHY ARMENIA =================== -->
 <div class="view" id="v-why-armenia" hidden>
   <section class="page-hero">
-    <div class="wrap">
+    <div class="wrap wa-hero ararat">
+      <svg class="scene" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+  <defs>
+   <linearGradient id="mtA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C98B6A"/><stop offset="1" stop-color="#A9654A"/></linearGradient>
+   <linearGradient id="mtB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A5638"/><stop offset="1" stop-color="#7B4532"/></linearGradient>
+   <linearGradient id="mtC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6B3826"/><stop offset="1" stop-color="#4A2619"/></linearGradient>
+  </defs>
+  <g data-depth style="--dep:.7"><circle cx="930" cy="120" r="70" fill="#FFF1E2" opacity=".85"/><circle cx="930" cy="120" r="110" fill="#FFF1E2" opacity=".25"/></g>
+  <g data-depth style="--dep:.4">
+   <path d="M300 420 L640 92 Q660 74 680 92 L1080 420Z" fill="url(#mtA)"/>
+   <path d="M600 132 L640 92 Q660 74 680 92 L724 134 L700 128 L684 146 L664 124 L646 142 L628 126Z" fill="#FFFAF4"/>
+   <path d="M120 420 L390 210 Q402 200 414 210 L640 420Z" fill="url(#mtA)" opacity=".9"/>
+   <path d="M372 225 L390 210 Q402 200 414 210 L432 224 L418 222 L404 232 L392 222 L382 230Z" fill="#FFFAF4"/>
+  </g>
+  <g data-depth style="--dep:.15"><path d="M0 420 L0 330 Q150 280 300 320 T620 300 T900 330 T1200 300 L1200 420Z" fill="url(#mtB)"/><rect x="0" y="419" width="1200" height="200" fill="#7B4532"/></g>
+  <g data-depth style="--dep:0"><path d="M0 420 L0 380 Q200 340 420 372 T820 360 T1200 370 L1200 420Z" fill="url(#mtC)"/><rect x="0" y="419" width="1200" height="200" fill="#4A2619"/>
+   <g fill="#3A1D12"><path d="M140 378h6v-40l-3-6-3 6zM154 378h5v-30l-2.5-5-2.5 5z"/><path d="M1010 372h7v-50l-3.5-7-3.5 7z"/><path d="M1030 372h5v-34l-2.5-5-2.5 5z"/></g></g>
+</svg>
       <p class="eyebrow" data-i18n="wa.eyebrow">Why Armenia</p>
       <h1 data-i18n-html="wa.title">Why Armenia <em class="acc">for your smile</em></h1>
-      <p class="lead" data-i18n="wa.lead">A short flight from much of Europe, Russia and the Middle East, Armenia combines modern dentistry at lower prices with one of the oldest cultures in the world.</p>
+      <p class="lead" style="color:#4E2E20" data-i18n="wa.lead">A short flight from much of Europe, Russia and the Middle East, Armenia combines modern dentistry at lower prices with one of the oldest cultures in the world.</p>
     </div>
   </section>
   <section class="sec" style="padding-top:20px">
@@ -847,6 +970,7 @@ const DOCTORS=[
 ];
 const T={
 en:{
+ mq:["Veneers","Implants","Free consultation","Flights","Airport pickup","Hotel","City tour","Yerevan"],
  skip:"Skip to content","nav.treatments":"Treatments","nav.trip":"Your trip","nav.doctors":"Doctors","nav.why":"Why Armenia","nav.about":"About us","nav.faq":"FAQ","nav.cta":"Free consultation",
  "hero.eyebrow":"Dental tourism · Yerevan, Armenia","hero.h1a":"Your new smile,","hero.h1b":"made in Yerevan",
  "hero.sub":"Veneers and implants from Venera's specialists, with your whole trip arranged <b>from A to Z</b>: flights, airport pickup, hotel, guide and city tour.",
@@ -889,6 +1013,7 @@ en:{
  "ft.about":"Dental tourism in Yerevan: veneers and implants, with your trip arranged from A to Z.","ft.explore":"Explore","ft.contact":"Contact","ft.start":"Get started","ft.startd":"Free video consultation with a Venera doctor.","ft.staff":"Staff: bookings"
 },
 ru:{
+ mq:["Виниры","Импланты","Бесплатная консультация","Авиабилеты","Трансфер","Отель","Экскурсия","Ереван"],
  skip:"Перейти к содержимому","nav.treatments":"Лечение","nav.trip":"Ваша поездка","nav.doctors":"Врачи","nav.why":"Почему Армения","nav.about":"О нас","nav.faq":"Вопросы","nav.cta":"Бесплатная консультация",
  "hero.eyebrow":"Стоматологический туризм · Ереван, Армения","hero.h1a":"Ваша новая улыбка,","hero.h1b":"сделано в Ереване",
  "hero.sub":"Виниры и импланты от специалистов Venera, а всю поездку мы организуем <b>от А до Я</b>: авиабилеты, встреча в аэропорту, отель, гид и экскурсия по городу.",
@@ -931,6 +1056,7 @@ ru:{
  "ft.about":"Стоматологический туризм в Ереване: виниры и импланты, поездка организована от А до Я.","ft.explore":"Разделы","ft.contact":"Контакты","ft.start":"Начать","ft.startd":"Бесплатная видеоконсультация с врачом Venera.","ft.staff":"Для сотрудников: записи"
 },
 hy:{
+ mq:["Վինիրներ","Իմպլանտներ","Անվճար խորհրդատվություն","Ավիատոմսեր","Տրանսֆեր","Հյուրանոց","Էքսկուրսիա","Երևան"],
  skip:"Անցնել բովանդակությանը","nav.treatments":"Բուժում","nav.trip":"Ձեր ճամփորդությունը","nav.doctors":"Բժիշկներ","nav.why":"Ինչու Հայաստան","nav.about":"Մեր մասին","nav.faq":"Հարցեր","nav.cta":"Անվճար խորհրդատվություն",
  "hero.eyebrow":"Ատամնաբուժական տուրիզմ · Երևան, Հայաստան","hero.h1a":"Ձեր նոր ժպիտը՝","hero.h1b":"ստեղծված Երևանում",
  "hero.sub":"Վինիրներ և իմպլանտներ Venera-ի մասնագետներից, իսկ ձեր ամբողջ ճամփորդությունը կազմակերպում ենք <b>Ա-ից Ֆ</b>՝ ավիատոմսեր, դիմավորում օդանավակայանում, հյուրանոց, ուղեկցորդ և քաղաքային էքսկուրսիա։",
@@ -990,6 +1116,7 @@ function applyLang(){
   renderDoctors();renderFaq();renderReasons();renderDocPick();renderDays();renderSlots();
   if(curStep===4)renderSummary();
   if(currentView==="bookings")renderBookings();
+  if($("#mq"))renderMarquee();
 }
 
 /* ================= Static renderers ================= */
@@ -1014,6 +1141,7 @@ function route(){
   let view=VIEWS.includes(h)?h:(HOME_ANCHORS.includes(h)?"home":"home");
   const changed=view!==currentView;
   currentView=view;
+  if(changed)document.body.dataset.tone="porcelain";
   VIEWS.forEach(v=>{$("#v-"+v).hidden=v!==view});
   $$("nav.main a").forEach(a=>{const k=a.getAttribute("href").slice(1);a.toggleAttribute("aria-current",k===h||(k===view&&view!=="home"));if(a.hasAttribute("aria-current"))a.setAttribute("aria-current","page")});
   $("#mainnav").classList.remove("open");$(".menu-btn").setAttribute("aria-expanded","false");
@@ -1021,6 +1149,7 @@ function route(){
   else if(changed||h==="home"){window.scrollTo(0,0);if(changed)$("#main").focus?.({preventScroll:true});}
   if(view==="bookings")initBookings();
   if(view==="consultation")loadTaken();
+  requestAnimationFrame(()=>armReveals($("#v-"+view)));
 }
 $("#main").tabIndex=-1;
 addEventListener("hashchange",route);
@@ -1261,8 +1390,76 @@ function renderBookings(){
   $$("select[data-bid]").forEach(s=>s.onchange=async()=>{s.disabled=true;try{await db.doc("bookings/"+s.dataset.bid).update({status:s.value})}catch(e){}s.disabled=false});
 }
 
+
+/* ================= Motion ================= */
+const RM=matchMedia("(prefers-reduced-motion: reduce)");
+function renderMarquee(){
+  const words=t("mq");const cls=["w","w o","w a"];
+  const one=words.map((w,i)=>`<span class="${cls[i%3]}">${esc(w)}</span><svg class="i" aria-hidden="true"><use href="#i-tooth"/></svg>`).join("");
+  $("#mq").innerHTML=one+one+one;
+}
+/* reveal-on-scroll: elements already on screen at load stay visible */
+const REVEAL_SEL=[".sec-head",".treat",".price-note",".trip .steps li",".legend",".doc",".ba-card",".review",".band.cta",".reason",".place","details",".about-grid>*",".panel",".stepper"];
+const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove("pre","dim");io.unobserve(e.target)}})},{rootMargin:"0px 0px -12% 0px",threshold:.08}):null;
+function armReveals(root=document){
+  if(!io||RM.matches)return;
+  REVEAL_SEL.forEach(sel=>$$(sel,root).forEach((el,i)=>{
+    if(el.dataset.rv)return;el.dataset.rv=1;el.classList.add("rv");
+    const sib=el.parentElement?[...el.parentElement.children].indexOf(el):0;
+    el.style.setProperty("--d",Math.min(sib,6)*90+"ms");
+    if(el.matches(".treat,.doc,.place"))el.classList.add("zoom");
+    if(el.matches(".review,.ba-card"))el.classList.add("blur");
+    const r=el.getBoundingClientRect();
+    if(el.offsetParent!==null&&r.top>innerHeight*.92){el.classList.add("pre");io.observe(el)}
+  }));
+  $$(".rv.zoom.band").forEach(el=>{const r=el.getBoundingClientRect();if(r.top>innerHeight){el.classList.add("pre");io.observe(el)}});
+}
+/* scroll-linked effects */
+let mqX=0,lastY=scrollY,vel=0;
+function onFrame(){
+  const y=scrollY,h=document.documentElement.scrollHeight-innerHeight;
+  document.documentElement.style.setProperty("--p",h>0?(y/h).toFixed(4):0);
+  const card=$(".hero-card");
+  if(card&&currentView==="home"){const sy=Math.min(1,Math.max(0,y/700));card.style.setProperty("--sy",RM.matches?0:sy.toFixed(3))}
+  // marquee drifts and speeds up with scroll velocity
+  vel=vel*.9+(y-lastY)*.1;lastY=y;
+  if(!RM.matches&&currentView==="home"){const tr=$("#mq");mqX-=0.6+Math.abs(vel)*.35;const w=tr.scrollWidth/3;if(w&&-mqX>w)mqX+=w;tr.style.setProperty("--mq",mqX.toFixed(1)+"px")}
+  // trip line fills while the section passes
+  const tl=$("#tripLine");if(tl&&currentView==="home"){const r=tl.parentElement.getBoundingClientRect();const v=Math.min(1,Math.max(0,(innerHeight*.75-r.top)/(r.height*.8)));tl.style.setProperty("--tl",v.toFixed(3))}
+  // Ararat parallax
+  $$(".ararat").forEach(a=>{if(a.offsetParent===null)return;const r=a.getBoundingClientRect();a.style.setProperty("--py",RM.matches?0:Math.max(-120,Math.min(120,(r.top+r.height/2-innerHeight/2)*.12)).toFixed(1))});
+  requestAnimationFrame(onFrame);
+}
+/* body tone crossfade between sections */
+const toneIO=("IntersectionObserver" in window)?new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)document.body.dataset.tone=e.target.dataset.tone})},{rootMargin:"-45% 0px -45% 0px"}):null;
+$$("[data-tone]").forEach(el=>toneIO&&toneIO.observe(el));
+/* hero mouse parallax */
+const heroCard=$(".hero-card");
+heroCard.addEventListener("pointermove",e=>{if(RM.matches||e.pointerType!=="mouse")return;const r=heroCard.getBoundingClientRect();heroCard.style.setProperty("--mx",((e.clientX-r.left)/r.width-.5)*2);heroCard.style.setProperty("--my",((e.clientY-r.top)/r.height-.5)*2)});
+heroCard.addEventListener("pointerleave",()=>{heroCard.style.setProperty("--mx",0);heroCard.style.setProperty("--my",0)});
+/* sparkles around the implant */
+(function sparkles(){
+  const c=$("#spark"),ctx=c.getContext("2d");let W=0,H=0,dpr=1,P=[],run=true;
+  const size=()=>{dpr=Math.min(2,devicePixelRatio||1);W=c.clientWidth;H=c.clientHeight;c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)};
+  const spawn=(init)=>({x:W*(.25+Math.random()*.55),y:init?Math.random()*H:H*(.55+Math.random()*.4),r:Math.random()*2.2+.4,vy:-(Math.random()*.5+.15),vx:(Math.random()-.5)*.25,a:0,life:0,max:200+Math.random()*240,tw:Math.random()*6});
+  size();addEventListener("resize",size);P=Array.from({length:70},()=>spawn(true));
+  new IntersectionObserver(es=>{run=es[0].isIntersecting},{}).observe(c);
+  function draw(){
+    if(run&&!RM.matches&&currentView==="home"){
+      ctx.clearRect(0,0,W,H);
+      for(const p of P){p.life++;p.x+=p.vx;p.y+=p.vy;p.tw+=.08;const k=p.life/p.max;p.a=Math.sin(Math.PI*k)*(.55+.45*Math.sin(p.tw));
+        if(p.life>p.max)Object.assign(p,spawn(false));
+        ctx.globalAlpha=Math.max(0,p.a);ctx.fillStyle="#FFF4EA";ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();
+        if(p.r>2){ctx.globalAlpha=Math.max(0,p.a)*.6;ctx.fillRect(p.x-p.r*3,p.y-.4,p.r*6,.8);ctx.fillRect(p.x-.4,p.y-p.r*3,.8,p.r*6)}}
+    }
+    requestAnimationFrame(draw);
+  }
+  if(RM.matches){$(".orbit")?.pauseAnimations?.()}
+  draw();
+})();
+
 /* ================= Boot ================= */
-setStep(1,true);applyLang();tick();route();
+setStep(1,true);applyLang();tick();route();renderMarquee();requestAnimationFrame(()=>{armReveals();onFrame()});
 </script>
 </body>
 </html>
